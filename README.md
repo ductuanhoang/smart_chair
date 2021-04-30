@@ -1,5 +1,7 @@
-# Wifi SCAN Example
+# Smart chair
 
-This example shows how to scan for available set of APs.
 
-* The SCAN_LIST_SIZE parameter needs to be set from the example configuration menu. It represents maximum number of scan list entries that driver can populate.
+This project will read data as : humidity, temperature, rain and dust, after that send data via mqtt to AWS
+* Update firmware via AWS S3
+* Send data to cloud
+* Smart config using wifi manager
