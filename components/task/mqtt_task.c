@@ -125,15 +125,7 @@ static esp_mqtt_client_handle_t client;
 static void mqtt_app_start(void);
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event);
 static void mqtt_send_task(void *pvParameters);
-// static void mqtt_get_cer(void);
 
-// const char *topic_sub = "job/ard-smartstop/myhome/ard-smartstop-123456/list";
-// const char *topic_pub = "job/ard-smartstop/myhome/ard-smartstop-123456/status";
-
-// Telemetry	<environment>/dt/ard-smartstop/<client_id>
-// 	        <environment>/dt/ard-smartstop/<client_id>/error
-// Job	        <environment>/job/ard-smartstop/<client_id>/accepted
-// 	        <environment>/job/ard-smartstop/<client_id>/status
 
 /***********************************************************************************************************************
 * Exported global variables and functions (to be accessed by other files)
@@ -172,7 +164,7 @@ static void mqtt_app_start(void)
     strcat(client_id, wifi_get_mac());
     APP_LOGI("Client id: %s", client_id);
     const esp_mqtt_client_config_t mqtt_cfg = {
-        .uri = "mqtts://a3qnicqxfi1gf7-ats.iot.ap-southeast-1.amazonaws.com:8883",
+        .uri = "mqtt_url",
         .event_handle = mqtt_event_handler,
         .client_cert_pem = (const char *)client_cert_pem_start,
         .client_key_pem = (const char *)client_key_pem_start,
@@ -181,17 +173,6 @@ static void mqtt_app_start(void)
         // .use_global_ca_store = true,
     };
 
-    //using cloud mqt
-    // const esp_mqtt_client_config_t mqtt_cfg = {
-    //     .host = "m13.cloudmqtt.com",
-    //     .port = 11734,
-    //     .client_id = "1234adc",
-    //     .username = "wcewiofp",
-    //     .password = "fyFZMCLNvoD9",
-    //     .keepalive = 60,
-    //     .event_handle = mqtt_event_handler,
-    // };
-    // memset(mqtt_cfg.client_id, 0x00, sizeof(MQTT_MAX_CLIENT_LEN));
     memset(mqtt_config.mqtt_topic_pub, 0x00, sizeof(mqtt_config.mqtt_topic_pub));
     memset(mqtt_config.mqtt_topic_pub_err, 0x00, sizeof(mqtt_config.mqtt_topic_pub_err));
     memset(mqtt_config.mqtt_topic_jobsub, 0x00, sizeof(mqtt_config.mqtt_topic_jobsub));
@@ -202,7 +183,6 @@ static void mqtt_app_start(void)
     sprintf(mqtt_config.mqtt_topic_jobsub, "stag/job/ard-smartstop/%s/accepted", client_id);
     sprintf(mqtt_config.mqtt_topic_jobpub, "stag/job/ard-smartstop/%s/status", client_id);
 
-    // sprintf((char *)mqtt_cfg.client_id, "ard-smartstop-%s", wifi_get_mac());
     APP_LOGI("mqtt_topic_pub = %s", mqtt_config.mqtt_topic_pub);
     APP_LOGI("mqtt_topic_pub_err = %s", mqtt_config.mqtt_topic_pub_err);
     APP_LOGI("mqtt_topic_jobsub = %s", mqtt_config.mqtt_topic_jobsub);
@@ -410,18 +390,18 @@ void mqtt_get_cer(void)
 {
     APP_LOGI("-------------mqtt_get_cer");
     esp_http_client_config_t config = {
-        .url = "https://iot.smartstop.elifeup.com/iot-thing/active",
+        .url = "https_url",
     };
     esp_http_client_handle_t client = esp_http_client_init(&config);
 
     char output_buffer[MAX_HTTP_OUTPUT_BUFFER] = {0}; // Buffer to store response of http request
     // POST Request
-    const char *post_data = "{\"thing_id\":\"ard-smartstop-123456\"}";
-    esp_http_client_set_url(client, "https://iot.smartstop.elifeup.com/iot-thing/active");
+    const char *post_data = "post_url;
+    esp_http_client_set_url(client, "post_url");
     esp_http_client_set_method(client, HTTP_METHOD_POST);
     esp_http_client_set_header(client, "Content-Type", "application/json");
-    esp_http_client_set_header(client, "Authorization", "Bearer Y0VfmU0GgLm3n0e9ZdelERL8M5QOQVHu");
-    esp_http_client_set_header(client, "X-SmartStop-Api-Key", "NW4LUY150TJBIFYKGYEZ");
+    esp_http_client_set_header(client, "Authorization", "Authorization");
+    esp_http_client_set_header(client, "X-SmartStop-Api-Key", "key");
     esp_err_t err = esp_http_client_open(client, strlen(post_data));
     if (err != ESP_OK)
     {
