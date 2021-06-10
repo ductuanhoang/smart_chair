@@ -162,7 +162,7 @@ static bool ota_get_status(void)
 	esp_http_client_handle_t client_2;
 	APP_LOGI("-------------ota_get_status");
 	esp_http_client_config_t config = {
-		.url = "https://iot.smartstop.elifeup.com/iot-thing/ota",
+		.url = "https_ota",
 		.event_handler = _ota_http_event_handle,
 		.timeout_ms = 50000,
 	};
@@ -178,8 +178,8 @@ static bool ota_get_status(void)
 	sprintf(post_data, "{\"thing_id\":\"ard-smartstop-%s\",\"firmware_hash\":\"%s\"}", mac_add, sha256_buf);
 	esp_http_client_set_method(client_2, HTTP_METHOD_POST);
 	esp_http_client_set_header(client_2, "Content-Type", "application/json");
-	esp_http_client_set_header(client_2, "Authorization", "Bearer Y0VfmU0GgLm3n0e9ZdelERL8M5QOQVHu");
-	esp_http_client_set_header(client_2, "X-SmartStop-Api-Key", "NW4LUY150TJBIFYKGYEZ");
+	esp_http_client_set_header(client_2, "Authorization", "Authorization");
+	esp_http_client_set_header(client_2, "X-SmartStop-Api-Key", "Key");
 
 	APP_LOGI("post_data = %s", post_data);
 	esp_err_t err = esp_http_client_perform(client_2);
